@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editor de Texto - DOM y JavaScript</title>
+    <style>
+        .active {
+            background-color: #28a745 !important; /* Verde para indicar activado */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-1 my-sm-2 my-md-4 my-lg-5">
+        <h1>Editor de Texto</h1>
+        <div class="card">
+            <div class="card-body">
+                <h2>Texto</h2>
+
+                <p class="texto" id="texto">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec elementum auctor libero, vel imperdiet est.
+                </p>
+
+                <input type="text" id="input-texto" class="form-control my-2" placeholder="Editar texto...">
+
+                <input type="number" id="input-tamano" class="form-control my-2" placeholder="Tamaño de texto (ej: 20)" min="10" max="100">
+
+                <hr>
+
+                <h2>Opciones de Formato</h2>
+                <div class="row">
+                    <div class="col-6 col-md-3 my-1">
+                        <button id="btn-negrita" class="btn d-block w-100 btn-primary" data-formato="negrita">
+                            Bold (Negrita)
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-3 my-1">
+                        <button id="btn-cursiva" class="btn d-block w-100 btn-primary" data-formato="cursiva">
+                            Italic (Cursiva)
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-3 my-1">
+                        <button id="btn-subrayado" class="btn d-block w-100 btn-primary" data-formato="subrayado">
+                            Underline (Subrayado)
+                        </button>
+                    </div>
+                    <div class="col-6 col-md-3 my-1">
+                        <button id="btn-color" class="btn d-block w-100 btn-primary" data-formato="color">
+                            Color Rojo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const texto = document.getElementById('texto');
+        const inputTexto = document.getElementById('input-texto');
+        const inputTamano = document.getElementById('input-tamano');
+
+        // Estados de formato
+        const estados = {
+            negrita: false,
+            cursiva: false,
+            subrayado: false,
+            color: false
+        };
+
+        function actualizarEstilos() {
+            texto.style.fontWeight = estados.negrita ? 'bold' : 'normal';
+            texto.style.fontStyle = estados.cursiva ? 'italic' : 'normal';
+            texto.style.textDecoration = estados.subrayado ? 'underline' : 'none';
+            texto.style.color = estados.color ? 'red' : 'black';
+        }
+
+        function toggleBotonActivo(boton, estado) {
+            if (estado) {
+                boton.classList.add('active');
+            } else {
+                boton.classList.remove('active');
+            }
+        }
+
+        function funcionNegrita() {
+            estados.negrita = !estados.negrita;
+            actualizarEstilos();
+            toggleBotonActivo(document.getElementById('btn-negrita'), estados.negrita);
+        }
+
+        function funcionCursiva() {
+            estados.cursiva = !estados.cursiva;
+            actualizarEstilos();
+            toggleBotonActivo(document.getElementById('btn-cursiva'), estados.cursiva);
+        }
+
+        function funcionSubrayado() {
+            estados.subrayado = !estados.subrayado;
+            actualizarEstilos();
+            toggleBotonActivo(document.getElementById('btn-subrayado'), estados.subrayado);
+        }
+
+        function funcionColor() {
+            estados.color = !estados.color;
+            actualizarEstilos();
+            toggleBotonActivo(document.getElementById('btn-color'), estados.color);
+        }
+
+        function handlerBoton(e) {
+            const funcionBoton = e.target.dataset.formato;
+            switch (funcionBoton) {
+                case 'negrita':
+                    funcionNegrita();
+                    break;
+                case 'cursiva':
+                    funcionCursiva();
+                    break;
+                case 'subrayado':
+                    funcionSubrayado();
+                    break;
+                case 'color':
+                    funcionColor();
+                    break;
+            }
+        }
+
+        document.querySelectorAll('button.btn').forEach(e => e.addEventListener('click', handlerBoton));
+
+        // Actualizar texto cuando el usuario escribe
+        inputTexto.addEventListener('input', () => {
+            texto.textContent = inputTexto.value;
+        });
+
+        // Cambiar tamaño del texto
+        inputTamano.addEventListener('input', () => {
+            texto.style.fontSize = `${inputTamano.value}px`;
+        });
+
+    </script>
+</body>
+</html>
